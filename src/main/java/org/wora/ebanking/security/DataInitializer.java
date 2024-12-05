@@ -2,6 +2,7 @@ package org.wora.ebanking.security;
 
 import lombok.RequiredArgsConstructor;
 import org.wora.ebanking.entity.AppUser;
+import org.wora.ebanking.entity.UserRole;
 import org.wora.ebanking.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +19,19 @@ public class DataInitializer {
     public CommandLineRunner init() {
         return args -> {
             if (userRepository.count() == 0) {
-                AppUser dbUser = new AppUser();
-                dbUser.setUsername("dbuser");
-                dbUser.setPassword(passwordEncoder.encode("password"));
-                userRepository.save(dbUser);
+                AppUser regularUser = new AppUser();
+                regularUser.setUsername("user");
+                regularUser.setPassword(passwordEncoder.encode("password"));
+                regularUser.setRole(UserRole.ROLE_USER);
+                userRepository.save(regularUser);
+
+                AppUser adminUser = new AppUser();
+                adminUser.setUsername("admin");
+                adminUser.setPassword(passwordEncoder.encode("admin"));
+                adminUser.setRole(UserRole.ROLE_ADMIN);
+                userRepository.save(adminUser);
             }
         };
     }
 }
+
